@@ -70,7 +70,6 @@ var audience = jwtSection.GetValue<string>("Audience");
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
-        // 1) Standard-Validation
         options.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuer = true,
@@ -85,40 +84,27 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ClockSkew = TimeSpan.FromMinutes(5)
         };
 
-        // 2) Hooks für Fehler-Logging und Header-Debug
         options.Events = new JwtBearerEvents
         {
-            // Wenn die Validierung scheitert, logge die Exception
-            OnAuthenticationFailed = ctx =>
-            {
-                Console.Error.WriteLine(
-                  $"JWT Auth Failure: {ctx.Exception.GetType().Name}: {ctx.Exception.Message}");
-                return Task.CompletedTask;
-            },
-
-            // Jedes Mal, wenn ein Token erwartet wird, loggen wir den Raw-Header:
             OnMessageReceived = context =>
             {
-                // Lies den kompletten Authorization-Header aus
-                var rawHeader = context.Request.Headers["Authorization"].ToString();
-                Console.Error.WriteLine($"*** Raw Authorization Header: '{rawHeader}' ***");
-
-                // Falls es ein SignalR-Request mit access_token im Query gibt,
-                // setzen wir context.Token trotzdem daraus:
-                var accessToken = context.Request.Query["access_token"];
-                var path = context.HttpContext.Request.Path;
-                if (!string.IsNullOrEmpty(accessToken)
-                    && path.StartsWithSegments("/gamehub"))
+                var authHeader = context.Request.Headers["Authorization"].FirstOrDefault();
+                if (!string.IsNullOrEmpty(authHeader) && authHeader.StartsWith("Bearer ", StringComparison.OrdinalIgnoreCase))
                 {
-                    context.Token = accessToken;
-                    Console.Error.WriteLine($"*** Using access_token from query: '{accessToken}' ***");
+                    // DER entscheidende Teil: context.Token hier setzen
+                    context.Token = authHeader.Substring("Bearer ".Length).Trim();
                 }
-
+                else if (context.Request.Path.StartsWithSegments("/gamehub"))
+                {
+                    // Fallback für SignalR
+                    var qsToken = context.Request.Query["access_token"].FirstOrDefault();
+                    if (!string.IsNullOrEmpty(qsToken))
+                        context.Token = qsToken;
+                }
                 return Task.CompletedTask;
             }
         };
     });
-
 
 
 builder.Services.AddAuthorization();
