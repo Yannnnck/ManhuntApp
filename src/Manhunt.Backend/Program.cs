@@ -88,22 +88,44 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         {
             OnMessageReceived = context =>
             {
-                var authHeader = context.Request.Headers["Authorization"].FirstOrDefault();
-                if (!string.IsNullOrEmpty(authHeader) && authHeader.StartsWith("Bearer ", StringComparison.OrdinalIgnoreCase))
+                // 1) SignalR-Fallback per ?access_token=…
+                var accessToken = context.Request.Query["access_token"].FirstOrDefault();
+                var path = context.HttpContext.Request.Path;
+                if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/gamehub"))
                 {
-                    // DER entscheidende Teil: context.Token hier setzen
-                    context.Token = authHeader.Substring("Bearer ".Length).Trim();
+                    context.Token = accessToken;
+                    Console.Error.WriteLine($"[Bearer] Using access_token from query: '{accessToken}'");
+                    return Task.CompletedTask;
                 }
-                else if (context.Request.Path.StartsWithSegments("/gamehub"))
+
+                // 2) Normaler Header-Flow: nur die ERSTE Authorization-Zeile auslesen
+                var headerValues = context.Request.Headers["Authorization"];
+                // FirstOrDefault() gibt Dir wirklich nur die **erste** Zeile zurück,
+                // nicht alle per ToString() zusammengeklebt.
+                var header = headerValues.FirstOrDefault();
+                Console.Error.WriteLine($"[Bearer] Raw Authorization header value: '{header}'");
+
+                if (!string.IsNullOrEmpty(header) && header.StartsWith("Bearer "))
                 {
-                    // Fallback für SignalR
-                    var qsToken = context.Request.Query["access_token"].FirstOrDefault();
-                    if (!string.IsNullOrEmpty(qsToken))
-                        context.Token = qsToken;
+                    var token = header.Substring("Bearer ".Length).Trim();
+                    context.Token = token;
+                    Console.Error.WriteLine($"[Bearer] Parsed token (first value only): '{token}'");
                 }
+                else
+                {
+                    Console.Error.WriteLine("[Bearer] No valid Authorization header found.");
+                }
+
+                return Task.CompletedTask;
+            },
+            OnAuthenticationFailed = ctx =>
+            {
+                Console.Error.WriteLine($"JWT Auth Failure: {ctx.Exception.GetType().Name}: {ctx.Exception.Message}");
                 return Task.CompletedTask;
             }
         };
+
+
     });
 
 
