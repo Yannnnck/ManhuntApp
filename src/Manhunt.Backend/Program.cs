@@ -67,40 +67,59 @@ var secretKey = jwtSection.GetValue<string>("SecretKey");
 var issuer = jwtSection.GetValue<string>("Issuer");
 var audience = jwtSection.GetValue<string>("Audience");
 
-builder.Services.AddAuthentication(options =>
-{
-    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-})
-.AddJwtBearer(options =>
-{
-    options.TokenValidationParameters = new TokenValidationParameters
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
     {
-        ValidateIssuer = true,
-        ValidIssuer = config["JwtSettings:Issuer"],
-        ValidateAudience = true,
-        ValidAudience = config["JwtSettings:Audience"],
-        ValidateIssuerSigningKey = true,
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["JwtSettings:SecretKey"])),
-        ValidateLifetime = true,
-        ClockSkew = TimeSpan.FromMinutes(5)
-    };
-
-    options.Events = new JwtBearerEvents
-    {
-        OnMessageReceived = context =>
+        // 1) Standard-Validation
+        options.TokenValidationParameters = new TokenValidationParameters
         {
-            // Erlaubt Token aus QueryString, falls du über WebSocket (SignalR) testest
-            var accessToken = context.Request.Query["access_token"];
-            var path = context.HttpContext.Request.Path;
-            if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/gamehub"))
+            ValidateIssuer = true,
+            ValidIssuer = config["JwtSettings:Issuer"],
+            ValidateAudience = true,
+            ValidAudience = config["JwtSettings:Audience"],
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(
+                                          Encoding.UTF8.GetBytes(
+                                              config["JwtSettings:SecretKey"])),
+            ValidateLifetime = true,
+            ClockSkew = TimeSpan.FromMinutes(5)
+        };
+
+        // 2) Hooks für Fehler-Logging und Header-Debug
+        options.Events = new JwtBearerEvents
+        {
+            // Wenn die Validierung scheitert, logge die Exception
+            OnAuthenticationFailed = ctx =>
             {
-                context.Token = accessToken;
+                Console.Error.WriteLine(
+                  $"JWT Auth Failure: {ctx.Exception.GetType().Name}: {ctx.Exception.Message}");
+                return Task.CompletedTask;
+            },
+
+            // Jedes Mal, wenn ein Token erwartet wird, loggen wir den Raw-Header:
+            OnMessageReceived = context =>
+            {
+                // Lies den kompletten Authorization-Header aus
+                var rawHeader = context.Request.Headers["Authorization"].ToString();
+                Console.Error.WriteLine($"*** Raw Authorization Header: '{rawHeader}' ***");
+
+                // Falls es ein SignalR-Request mit access_token im Query gibt,
+                // setzen wir context.Token trotzdem daraus:
+                var accessToken = context.Request.Query["access_token"];
+                var path = context.HttpContext.Request.Path;
+                if (!string.IsNullOrEmpty(accessToken)
+                    && path.StartsWithSegments("/gamehub"))
+                {
+                    context.Token = accessToken;
+                    Console.Error.WriteLine($"*** Using access_token from query: '{accessToken}' ***");
+                }
+
+                return Task.CompletedTask;
             }
-            return Task.CompletedTask;
-        }
-    };
-});
+        };
+    });
+
+
 
 builder.Services.AddAuthorization();
 
@@ -113,28 +132,37 @@ builder.Services.AddEndpointsApiExplorer();
 // Hier fügt das ```Swashbuckle.AspNetCore```-Paket die Methode AddSwaggerGen() hinzu:
 builder.Services.AddSwaggerGen(c =>
 {
-    // Sorge dafür, dass Swagger statt des "kurzen" ClassNames 
-    // (z.B. "LobbyCreateLobbyRequest") den vollständigen CLR-Namen 
-    // (z.B. "Manhunt.Backend.Controllers.LobbyController+LobbyCreateLobbyRequest") 
-    // als SchemaId verwendet:
+    // (Optional) Falls Du CustomSchemaIds brauchst, kannst Du es behalten:
     c.CustomSchemaIds(type => type.FullName);
 
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "Manhunt API", Version = "v1" });
 
-    // JWT‐Security‐Schema
-    var jwtScheme = new OpenApiSecurityScheme
+    // 1) Lege die Definition Deines "Bearer"-Schemes an
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         Name = "Authorization",
         Type = SecuritySchemeType.Http,
         Scheme = "bearer",
         BearerFormat = "JWT",
         In = ParameterLocation.Header,
-        Description = "Bearer {token}"
-    };
-    c.AddSecurityDefinition("Bearer", jwtScheme);
+        Description = "Gib hier Deinen JWT-Token ein: Bearer {token}"
+    });
+
+    // 2) Verknüpfe **global** alle Endpunkte mit dieser Security-Definition
     c.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
-        { jwtScheme, new[] { "Bearer" } }
+        {
+            // **Wichtig**: Hier eine Referenz auf die eben definierte SecurityDefinition
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id   = "Bearer"
+                }
+            },
+            Array.Empty<string>() // keine OAuth2-Scopes
+        }
     });
 });
 
