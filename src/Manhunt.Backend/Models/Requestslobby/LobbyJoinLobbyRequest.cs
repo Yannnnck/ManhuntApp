@@ -1,4 +1,5 @@
-﻿using Manhunt.Shared.DTOs;
+﻿// Datei: Manhunt.Backend/Models/Requestslobby/LobbyJoinLobbyRequest.cs
+using Manhunt.Shared.DTOs;
 
 namespace Manhunt.Backend.Models.Requestslobby
 {

@@ -1,4 +1,5 @@
-﻿namespace Manhunt.Backend.Models.Requestsplayer
+﻿// Datei: Manhunt.Backend/Models/Requestsplayer/PlayerReadyRequest.cs
+namespace Manhunt.Backend.Models.Requestsplayer
 {
     public class PlayerReadyRequest
     {

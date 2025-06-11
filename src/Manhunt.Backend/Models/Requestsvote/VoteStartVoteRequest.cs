@@ -1,4 +1,5 @@
-﻿using Manhunt.Shared.Enums;
+﻿// Datei: Manhunt.Backend/Models/Requestsvote/VoteStartVoteRequest.cs
+using Manhunt.Shared.Enums;
 
 namespace Manhunt.Backend.Models.Requestsvote
 {

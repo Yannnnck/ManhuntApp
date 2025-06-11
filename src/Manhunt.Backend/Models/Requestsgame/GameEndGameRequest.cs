@@ -1,4 +1,5 @@
-﻿namespace Manhunt.Backend.Models.Requestsgame
+﻿// Datei: Manhunt.Backend/Models/Requestsgame/GameEndGameRequest.cs
+namespace Manhunt.Backend.Models.Requestsgame
 {
     public class GameEndGameRequest
     {

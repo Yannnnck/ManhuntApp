@@ -1,4 +1,5 @@
-﻿namespace Manhunt.Backend.Models.Requestsauth
+﻿// Datei: Manhunt.Backend/Models/Requestsauth/AuthLoginRequest.cs
+namespace Manhunt.Backend.Models.Requestsauth
 {
     public class AuthLoginRequest
     {

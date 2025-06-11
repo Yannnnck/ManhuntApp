@@ -1,4 +1,5 @@
-﻿using Manhunt.Shared.Enums;
+﻿// Datei: Manhunt.Backend/Models/Requestsplayer/PlayerCreatePlayerRequest.cs
+using Manhunt.Shared.Enums;
 
 namespace Manhunt.Backend.Models.Requestsplayer
 {
