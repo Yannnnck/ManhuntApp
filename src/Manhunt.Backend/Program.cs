@@ -81,7 +81,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                                           Encoding.UTF8.GetBytes(
                                               config["JwtSettings:SecretKey"])),
             ValidateLifetime = true,
-            ClockSkew = TimeSpan.FromMinutes(5)
+            ClockSkew = TimeSpan.FromMinutes(1440)
         };
 
         options.Events = new JwtBearerEvents

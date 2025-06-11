@@ -25,6 +25,7 @@ namespace Manhunt.Backend.Controllers
         /// Body: { "hostUserId": "...", "hostUsername": "...", "initialSettings": { ... } }
         /// </summary>
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> CreateLobby([FromBody] LobbyCreateLobbyRequest req)
         {
             var dto = await _lobbyService.CreateLobbyAsync(req.HostUserId, req.HostUsername, req.InitialSettings);
