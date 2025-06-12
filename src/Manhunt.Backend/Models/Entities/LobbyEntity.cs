@@ -20,7 +20,7 @@ namespace Manhunt.Backend.Models.Entities
         public string SettingsId { get; set; }
 
         [BsonRepresentation(BsonType.ObjectId)]
-        [BsonElement("HostUserId")]
+        [BsonElement("hostUserId")]
         public string HostUserId { get; set; }
 
         [BsonRepresentation(BsonType.ObjectId)]

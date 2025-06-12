@@ -13,9 +13,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.IdentityModel.Logging;
 using Microsoft.OpenApi.Models;    // <- für Swagger
 using MongoDB.Driver;
 using System.Text;
+
+IdentityModelEventSource.ShowPII = true;
 
 var builder = WebApplication.CreateBuilder(args);
 ConfigurationManager config = builder.Configuration;
@@ -120,9 +123,11 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             },
             OnAuthenticationFailed = ctx =>
             {
-                Console.Error.WriteLine($"JWT Auth Failure: {ctx.Exception.GetType().Name}: {ctx.Exception.Message}");
+                // Gib die komplette Exception aus, nicht nur Message
+                Console.Error.WriteLine("=== JWT Auth Failure ===");
+                Console.Error.WriteLine(ctx.Exception.ToString());
                 return Task.CompletedTask;
-            }
+            },
         };
 
 
@@ -194,6 +199,13 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+
+app.Use(async (ctx, next) =>
+{
+    if (ctx.Request.Headers.TryGetValue("Authorization", out var hdr))
+        Console.WriteLine($"→ Raw Authorization: '{hdr}'");
+    await next();
+});
 app.UseAuthentication();
 app.UseAuthorization();
 
