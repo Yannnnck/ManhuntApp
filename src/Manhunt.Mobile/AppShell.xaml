@@ -6,9 +6,12 @@
     xmlns:local="clr-namespace:Manhunt.Mobile"
     Title="Manhunt.Mobile">
 
-    <ShellContent
-        Title="Home"
-        ContentTemplate="{DataTemplate local:MainPage}"
-        Route="MainPage" />
-
+    <TabBar>
+        <ShellContent Title="Home" Icon="icon_home.png"
+                  ContentTemplate="{DataTemplate views:LoginPage}" />
+        <ShellContent Title="Lobby" Icon="icon_lobby.png"
+                  ContentTemplate="{DataTemplate views:LobbyListPage}" />
+        <ShellContent Title="Settings" Icon="icon_settings.png"
+                  ContentTemplate="{DataTemplate views:CreateLobbyPage}" />
+    </TabBar> >
 </Shell>

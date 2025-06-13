@@ -12,22 +12,22 @@ namespace Manhunt.Backend.Models.Entities
         [BsonRepresentation(BsonType.ObjectId)]
         public string LobbyId { get; set; }
 
-        [BsonElement("Code")]
+        // kein Attribut nötig, Default wäre "code"
         public string Code { get; set; }
 
         [BsonRepresentation(BsonType.ObjectId)]
-        [BsonElement("SettingsId")]
+        [BsonElement("settingsId")]
         public string SettingsId { get; set; }
 
         [BsonRepresentation(BsonType.ObjectId)]
-        [BsonElement("hostUserId")]
+        [BsonElement("HostId")]
         public string HostUserId { get; set; }
 
         [BsonRepresentation(BsonType.ObjectId)]
-        [BsonElement("PlayerIds")]
+        [BsonElement("PlayersIds")]
         public List<string> PlayerIds { get; set; } = new();
 
-        [BsonElement("Status")]
         public LobbyStatus Status { get; set; } = LobbyStatus.Created;
     }
+
 }
