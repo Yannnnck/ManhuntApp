@@ -3,10 +3,28 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Manhunt.Mobile.Views.JoinLobbyPage"
              Title="JoinLobbyPage">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
+    <ContentPage.BindingContext>
+        <vm:JoinLobbyViewModel />
+    </ContentPage.BindingContext>
+
+    <VerticalStackLayout Padding="20" Spacing="25">
+        <!-- QR-Scanner Platzhalter -->
+        <Frame HeightRequest="200" BorderColor="White" />
+
+        <!-- Code-Eingabe -->
+        <Entry Placeholder="Join Code" Text="{Binding JoinCode}" />
+
+        <Button
+      Text="Beitreten"
+      Command="{Binding JoinCommand}"
+      IsEnabled="{Binding IsNotBusy}" />
+
+        <Button
+      Text="Zurück"
+      Command="{Binding BackCommand}"
+      BackgroundColor="Red"
+      TextColor="White"/>
+
+        <Label Text="{Binding Error}" TextColor="LightCoral"/>
     </VerticalStackLayout>
 </ContentPage>
