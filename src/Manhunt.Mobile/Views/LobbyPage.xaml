@@ -1,10 +1,26 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Manhunt.Mobile.Views.LobbyPage"
-             Title="LobbyPage">
-    <VerticalStackLayout>
-            <Button Text="Join Lobby" Command="{Binding GoToJoin}" />
-            <Button Text="Create Lobby" Command="{Binding GoToCreate}" />
+<ContentPage
+  xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+  xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+  xmlns:vm="clr-namespace:Manhunt.Mobile.ViewModels"
+  x:Class="Manhunt.Mobile.Views.LobbyPage"
+  Title="Lobby">
+
+    <ContentPage.BindingContext>
+        <vm:LobbyViewModel />
+    </ContentPage.BindingContext>
+
+    <VerticalStackLayout Padding="20" Spacing="20">
+        <Button Text="Join Lobby" Command="{Binding GoToJoin}" />
+        <Button Text="Create Lobby" Command="{Binding GoToCreate}" />
+        <CollectionView ItemsSource="{Binding Lobbies}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Frame Padding="10" Margin="5" BorderColor="LightGray">
+                        <Label Text="{Binding Code}" />
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
     </VerticalStackLayout>
 </ContentPage>
