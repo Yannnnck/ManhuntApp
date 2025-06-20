@@ -27,6 +27,10 @@ namespace Manhunt.Backend.Models.Entities
         [BsonElement("PlayersIds")]
         public List<string> PlayerIds { get; set; } = new();
 
+        [BsonRepresentation(BsonType.ObjectId)]
+        [BsonElement("PlayersId")]
+        public List<string> PlayerId { get; set; } = new();
+
         public LobbyStatus Status { get; set; } = LobbyStatus.Created;
     }
 
