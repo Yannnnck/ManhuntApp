@@ -5,5 +5,6 @@ public partial class CreateLobbyPage : ContentPage
 	public CreateLobbyPage()
 	{
 		InitializeComponent();
-	}
+
+    }
 }
