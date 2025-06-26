@@ -8,11 +8,10 @@ namespace Manhunt.Mobile
         {
             InitializeComponent();
 
-            // alle nicht‐Tab‐Seiten registrieren
-            Routing.RegisterRoute(nameof(JoinLobbyPage), typeof(JoinLobbyPage));
-            Routing.RegisterRoute(nameof(CreateLobbyPage), typeof(CreateLobbyPage));
+            // alle Unter-Routen registrieren, mit denen wir per GoToAsync arbeiten wollen
             Routing.RegisterRoute(nameof(GameSettingsPage), typeof(GameSettingsPage));
             Routing.RegisterRoute(nameof(GamePage), typeof(GamePage));
         }
     }
+
 }

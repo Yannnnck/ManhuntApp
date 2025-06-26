@@ -11,10 +11,19 @@
                   Icon="home.png"
                   Route="HomePage"
                   ContentTemplate="{DataTemplate views:HomePage}" />
-        <ShellContent Title="Lobby"
-                  Icon="lobby.png"
-                  Route="LobbyPage"
+        <Tab Title="Lobby" Icon="lobby.png">
+            <ShellContent 
+                  Route="LobbyPage" 
                   ContentTemplate="{DataTemplate views:LobbyPage}" />
+
+            <!-- die beiden Unterseiten in denselben Tab packen -->
+            <ShellContent 
+                  Route="JoinLobbyPage" 
+                  ContentTemplate="{DataTemplate views:JoinLobbyPage}" />
+            <ShellContent 
+                  Route="CreateLobbyPage" 
+                  ContentTemplate="{DataTemplate views:CreateLobbyPage}" />
+        </Tab>
         <ShellContent Title="Settings"
                   Icon="settings.png"
                   Route="SettingsPage"
