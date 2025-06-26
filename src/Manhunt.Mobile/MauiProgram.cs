@@ -2,6 +2,7 @@
 using Manhunt.Mobile.Helpers;
 using Manhunt.Mobile.Services;
 using Manhunt.Mobile.ViewModels;
+using Manhunt.Mobile.Views;
 using Microsoft.Extensions.DependencyInjection;
 using System.Net.Http.Headers;
 
@@ -39,6 +40,8 @@ namespace Manhunt.Mobile
             builder.Services.AddTransient<CreateLobbyViewModel>();
             builder.Services.AddTransient<GameSettingsViewModel>();
             builder.Services.AddTransient<GameViewModel>();
+            builder.Services.AddTransient<LobbyPage>();
+            builder.Services.AddTransient<LobbyViewModel>();
 
 
             return builder.Build();

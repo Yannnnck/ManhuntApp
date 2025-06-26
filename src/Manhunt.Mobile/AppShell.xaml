@@ -7,27 +7,26 @@
   Title="Manhunt">
 
     <TabBar>
-        <ShellContent Title="Home"
-                  Icon="home.png"
-                  Route="HomePage"
-                  ContentTemplate="{DataTemplate views:HomePage}" />
-        <Tab Title="Lobby" Icon="lobby.png">
-            <ShellContent 
-                  Route="LobbyPage" 
-                  ContentTemplate="{DataTemplate views:LobbyPage}" />
+        <!-- 1) Home-Tab -->
+        <ShellContent 
+            Title="Home" 
+            Icon="home.png"
+            Route="HomePage" 
+            ContentTemplate="{DataTemplate views:HomePage}" />
 
-            <!-- die beiden Unterseiten in denselben Tab packen -->
-            <ShellContent 
-                  Route="JoinLobbyPage" 
-                  ContentTemplate="{DataTemplate views:JoinLobbyPage}" />
-            <ShellContent 
-                  Route="CreateLobbyPage" 
-                  ContentTemplate="{DataTemplate views:CreateLobbyPage}" />
-        </Tab>
-        <ShellContent Title="Settings"
-                  Icon="settings.png"
-                  Route="SettingsPage"
-                  ContentTemplate="{DataTemplate views:SettingsPage}" />
+        <!-- 2) Lobby-Tab (nur eine ShellContent für den Haupt-Tab) -->
+        <ShellContent 
+            Title="Lobby"
+            Icon="lobby.png"
+            Route="LobbyPage" 
+            ContentTemplate="{DataTemplate views:LobbyPage}" />
+
+        <!-- 3) Settings-Tab -->
+        <ShellContent 
+            Title="Settings"
+            Icon="settings.png"
+            Route="SettingsPage" 
+            ContentTemplate="{DataTemplate views:SettingsPage}" />
     </TabBar>
 
 </Shell>

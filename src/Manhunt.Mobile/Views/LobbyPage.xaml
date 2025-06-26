@@ -6,23 +6,29 @@
   x:Class="Manhunt.Mobile.Views.LobbyPage"
   Title="Lobby">
 
-    <!-- zentrieren auf dem Bildschirm -->
     <VerticalStackLayout
       Padding="20"
-      Spacing="20"
+      Spacing="30"
+      HorizontalOptions="Center"
       VerticalOptions="Center">
 
-        <!-- Join Lobby -->
-        <Button
-        Text="Join Lobby"
-        Style="{StaticResource PrimaryButtonStyle}"
-        Command="{Binding GoToJoinLobbyCommand}" />
+        <Button 
+      Text="Join Lobby" 
+      Command="{Binding JoinCommand}"
+      WidthRequest="300"
+      HeightRequest="80"
+      CornerRadius="16"
+      BackgroundColor="#9B8FFF"
+      TextColor="White"/>
 
-        <!-- Create Lobby -->
-        <Button
-        Text="Create Lobby"
-        Style="{StaticResource PrimaryButtonStyle}"
-        Command="{Binding GoToCreateLobbyCommand}" />
+        <Button 
+      Text="Create Lobby" 
+      Command="{Binding CreateCommand}"
+      WidthRequest="300"
+      HeightRequest="80"
+      CornerRadius="16"
+      BackgroundColor="#9B8FFF"
+      TextColor="White"/>
 
     </VerticalStackLayout>
 </ContentPage>
