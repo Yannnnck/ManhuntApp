@@ -6,10 +6,6 @@
     x:Class="Manhunt.Mobile.Views.CreateLobbyPage"
     Title="Create Lobby">
 
-    <ContentPage.BindingContext>
-        <vm:CreateLobbyViewModel />
-    </ContentPage.BindingContext>
-
     <ScrollView>
         <VerticalStackLayout Padding="20" Spacing="15">
             <!-- Beispiel für ein Setting -->

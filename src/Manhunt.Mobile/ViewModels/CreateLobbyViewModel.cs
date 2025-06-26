@@ -1,13 +1,19 @@
-﻿using System;
+﻿using Manhunt.Shared.Models.Requests.Manhunt.Shared.Models.Requests;
+using Manhunt.Mobile.Helpers;
+using Manhunt.Mobile.Services;
+using Manhunt.Shared.DTOs;
+using Microsoft.Maui.Controls;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using Manhunt.Mobile.Services;
-using Manhunt.Shared.DTOs;
-using Microsoft.Maui.Controls;
+using System.IdentityModel.Tokens.Jwt;
+
+
 
 namespace Manhunt.Mobile.ViewModels
 {
@@ -24,19 +30,41 @@ namespace Manhunt.Mobile.ViewModels
         {
             if (IsBusy) return;
             IsBusy = true;
+            Error = string.Empty;
+
             try
             {
+                // 1) Token holen
+                var jwt = TokenStorage.GetToken();
+                var handler = new JwtSecurityTokenHandler();
+                var token = handler.ReadJwtToken(jwt);
+
+                // 2) Claims auslesen
+                var userId = token.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
+                var username = token.Claims.First(c => c.Type == ClaimTypes.Name).Value;
+
+                // 3) Request bauen – hier (!) InitialSettings statt initialSettings
                 var req = new CreateLobbyRequest
                 {
-                    HostUserId = /* hier aus Token / Claim */,
-                    HostUsername = /* hier aus Claim */,
+                    HostUserId = userId,
+                    HostUsername = username,
                     InitialSettings = InitialSettings
                 };
+
+                // 4) API-Aufruf
                 var lobby = await _api.CreateLobbyAsync(req);
+
+                // 5) Navigation
                 await Shell.Current.GoToAsync($"GameSettingsPage?lobbyId={lobby.LobbyId}");
             }
-            catch (System.Exception ex) { Error = ex.Message; }
-            finally { IsBusy = false; }
+            catch (Exception ex)
+            {
+                Error = ex.Message;
+            }
+            finally
+            {
+                IsBusy = false;
+            }
         }
     }
 }

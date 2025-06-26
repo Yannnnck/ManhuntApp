@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Manhunt.Shared.Models.Requests.Manhunt.Shared.Models.Requests;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,6 +10,7 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using Manhunt.Shared.DTOs;
 using Manhunt.Mobile.Helpers;
+using System.Text.Json;
 
 namespace Manhunt.Mobile.Services
 {

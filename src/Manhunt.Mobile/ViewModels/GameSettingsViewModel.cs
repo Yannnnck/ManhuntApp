@@ -20,7 +20,6 @@ namespace Manhunt.Mobile.ViewModels
         }
 
         async void LoadLobby() { /* _api.GetLobbyByIdAsync(LobbyId) … */ }
-  …
 }
 
 }

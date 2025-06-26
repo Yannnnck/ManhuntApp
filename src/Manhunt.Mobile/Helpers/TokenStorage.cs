@@ -38,6 +38,9 @@ namespace Manhunt.Mobile.Helpers
             Token = null;
             Save();
         }
+        public static string GetToken()
+        => Token;
+
     }
 }
 

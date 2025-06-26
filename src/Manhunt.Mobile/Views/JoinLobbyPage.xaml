@@ -3,10 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:Manhunt.Mobile.ViewModels"
              x:Class="Manhunt.Mobile.Views.JoinLobbyPage"
-             Title="JoinLobbyPage">
-    <ContentPage.BindingContext>
-        <vm:JoinLobbyViewModel />
-    </ContentPage.BindingContext>
+             Title="Join Lobby">
 
     <VerticalStackLayout Padding="20" Spacing="25">
         <!-- QR-Scanner Platzhalter -->

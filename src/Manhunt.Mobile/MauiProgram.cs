@@ -5,6 +5,7 @@ using Manhunt.Mobile.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
 using System.Net.Http.Headers;
 
+
 namespace Manhunt.Mobile
 {
     public static class MauiProgram
@@ -38,6 +39,7 @@ namespace Manhunt.Mobile
             builder.Services.AddTransient<CreateLobbyViewModel>();
             builder.Services.AddTransient<GameSettingsViewModel>();
             builder.Services.AddTransient<GameViewModel>();
+
 
             return builder.Build();
         }

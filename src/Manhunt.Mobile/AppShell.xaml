@@ -3,26 +3,22 @@
   xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
   xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
   xmlns:views="clr-namespace:Manhunt.Mobile.Views"
-  Title="Manhunt"
-  x:Class="Manhunt.Mobile.AppShell">
+  x:Class="Manhunt.Mobile.AppShell"
+  Title="Manhunt">
 
-    <!-- Drei Haupt-Tabs -->
     <TabBar>
-        <Tab Title="Home" Icon="home.png">
-            <ShellContent Route="HomePage" ContentTemplate="{DataTemplate views:HomePage}" />
-        </Tab>
-        <Tab Title="Lobby" Icon="lobby.png">
-            <ShellContent Route="LobbyPage" ContentTemplate="{DataTemplate views:LobbyPage}" />
-        </Tab>
-        <Tab Title="Settings" Icon="settings.png">
-            <ShellContent Route="SettingsPage" ContentTemplate="{DataTemplate views:SettingsPage}" />
-        </Tab>
+        <ShellContent Title="Home"
+                  Icon="home.png"
+                  Route="HomePage"
+                  ContentTemplate="{DataTemplate views:HomePage}" />
+        <ShellContent Title="Lobby"
+                  Icon="lobby.png"
+                  Route="LobbyPage"
+                  ContentTemplate="{DataTemplate views:LobbyPage}" />
+        <ShellContent Title="Settings"
+                  Icon="settings.png"
+                  Route="SettingsPage"
+                  ContentTemplate="{DataTemplate views:SettingsPage}" />
     </TabBar>
-
-    <!-- Alle übrigen Routen -->
-    <ShellContent Route="JoinLobbyPage" ContentTemplate="{DataTemplate views:JoinLobbyPage}" />
-    <ShellContent Route="CreateLobbyPage" ContentTemplate="{DataTemplate views:CreateLobbyPage}" />
-    <ShellContent Route="GameSettingsPage" ContentTemplate="{DataTemplate views:GameSettingsPage}" />
-    <ShellContent Route="GamePage" ContentTemplate="{DataTemplate views:GamePage}" />
 
 </Shell>

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Manhunt.Shared.Models.Requests.Manhunt.Shared.Models.Requests;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;

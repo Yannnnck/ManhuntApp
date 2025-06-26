@@ -9,6 +9,25 @@
                 <ResourceDictionary Source="Resources/Styles/Colors.xaml" />
                 <ResourceDictionary Source="Resources/Styles/Styles.xaml" />
             </ResourceDictionary.MergedDictionaries>
+            <!-- Hintergrundfarbe der Pages -->
+            <Color x:Key="PageBackgroundColor">#1E1E1E</Color>
+            <Color x:Key="PrimaryColor">#8A7FFF</Color>
+            <Color x:Key="PrimaryTextColor">White</Color>
+
+            <!-- Button-Style -->
+            <Style x:Key="PrimaryButtonStyle" TargetType="Button">
+                <Setter Property="BackgroundColor" Value="{StaticResource PrimaryColor}" />
+                <Setter Property="TextColor" Value="{StaticResource PrimaryTextColor}" />
+                <Setter Property="CornerRadius" Value="8" />
+                <Setter Property="FontSize" Value="18" />
+                <Setter Property="HeightRequest" Value="50" />
+                <Setter Property="HorizontalOptions" Value="Fill" />
+                <Setter Property="FontSize"         Value="18" />
+                <Setter Property="CornerRadius"     Value="12" />
+                <Setter Property="HorizontalOptions" Value="Fill" />
+                <Setter Property="HeightRequest"      Value="100" />
+                <Setter Property="Margin"           Value="0,10" />
+            </Style>
         </ResourceDictionary>
     </Application.Resources>
 </Application>
